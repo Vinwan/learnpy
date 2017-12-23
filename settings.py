@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 class Settings():
 
     # 存储外星人入侵的所有设置的类
