@@ -6,6 +6,7 @@ import pygame
 
 from bullet import Bullet
 from alien import Alien
+from random import randint
 
 def check_keydown_events(event, ai_settings, screen, ship, bullets):
     # 按键响应
@@ -101,6 +102,7 @@ def create_fleet(ai_settings, screen, ship, aliens):
     # number_aliens_x = int(available_space_x / (2 * alien_width))
     number_aliens_x = get_number_aliens_x(ai_settings, alien.rect.width)
     number_rows = get_number_rows(ai_settings, ship.rect.height, alien.rect.height)
+    random_number = randint(-10,10)
 
     # 创建外星人群
     for row_number in range(number_rows):
