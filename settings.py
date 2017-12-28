@@ -15,11 +15,15 @@ class Settings():
         # 飞船的设置
         self.ship_speed_factor = 1.5
 
+        # 外星人设置
+        self.alien_speed_factor = 5
+        self.fleet_drop_speed = 10
+        # fleet_direciton = 1 turn right, = -1 turn left.
+        self.fleet_direciton = 1
+
         # bullet setting
         self.bullet_speed_factor = 15
         self.bullet_width = 3
         self.bullet_height = 15
         self.bullet_color = 60, 60, 60
         self.bullets_allowed = 3
-
-
