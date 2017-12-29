@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
+from time import sleep
 
 import pygame
 
@@ -122,10 +123,36 @@ def create_fleet(ai_settings, screen, ship, aliens):
             # 创建一个外星人并将其加入当前行
             create_alien(ai_settings, screen, aliens, alien_number, row_number)
 
-def update_aliens(ai_settings, aliens):
+def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
+
+    if stats.ships_left > 0:
+        # ships_left -1
+        stats.ships_left -= 1
+
+        # empty aliens list and bullets list
+        aliens.empty()
+        bullets.empty()
+
+        # creat new aliens and take ship to the bottom center screen
+        create_fleet(ai_settings, screen, ship, aliens)
+        ship.center_ship()
+
+        # pause
+        sleep(0.5)
+    else:
+        stats.game_active = False
+
+def update_aliens(ai_settings, stats, screen, ship, aliens, bullets):
     # check aliens in edges, update aliens position.
     check_fleet_edges(ai_settings, aliens)
     aliens.update()
+
+    # check aliens hit ship
+    if pygame.sprite.spritecollideany(ship, aliens):
+        ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
+
+    # check aliens in bottom
+    check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets)
 
 def check_fleet_edges(ai_settings, aliens):
     # do something if alien move to edges.
@@ -139,3 +166,12 @@ def change_fleet_direction(ai_settings, aliens):
     for alien in aliens.sprites():
         alien.rect.y += ai_settings.fleet_drop_speed
     ai_settings.fleet_direciton *= -1
+
+def check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets):
+    # check aliens to bottom
+    screen_rect = screen.get_rect()
+    for alien in aliens.sprites():
+        if alien.rect.bottom >= screen_rect.bottom:
+            # like ship hit
+            ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
+            break

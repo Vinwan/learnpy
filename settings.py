@@ -14,9 +14,10 @@ class Settings():
 
         # 飞船的设置
         self.ship_speed_factor = 15
+        self.ship_limit = 3
 
         # 外星人设置
-        self.alien_speed_factor = 5
+        self.alien_speed_factor = 50
         self.fleet_drop_speed = 10
         # fleet_direciton = 1 turn right, = -1 turn left.
         self.fleet_direciton = 1
