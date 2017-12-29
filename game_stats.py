@@ -5,7 +5,7 @@ class GameStats():
         self.ai_settings = ai_settings
         self.reset_stats()
         # game active
-        self.game_active = True
+        self.game_active = False
 
     def reset_stats(self):
         # initial in game running statistics info
