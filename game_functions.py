@@ -110,5 +110,20 @@ def create_fleet(ai_settings, screen, ship, aliens):
             # 创建一个外星人并将其加入当前行
             create_alien(ai_settings, screen, aliens, alien_number, row_number)
 
-def update_aliens(aliens):
+def update_aliens(ai_settings, aliens):
+    # check aliens in edges, update aliens position.
+    check_fleet_edges(ai_settings, aliens)
     aliens.update()
+
+def check_fleet_edges(ai_settings, aliens):
+    # do something if alien move to edges.
+    for alien in aliens.sprites():
+        if alien.check_edges():
+            change_fleet_direction(ai_settings, aliens)
+            break
+
+def change_fleet_direction(ai_settings, aliens):
+    # take aliens down and change direction.
+    for alien in aliens.sprites():
+        alien.rect.y += ai_settings.fleet_drop_speed
+    ai_settings.fleet_direciton *= -1

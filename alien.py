@@ -27,8 +27,15 @@ class Alien(Sprite):
         # 指定位置绘制外星人
         self.screen.blit(self.image, self.rect)
 
+    def check_edges(self):
+        # if aliens in the screen edge, return ture.
+        screen_rect = self.screen.get_rect()
+        if self.rect.right >= screen_rect.right:
+            return True
+        elif self.rect.left <= 0:
+            return True
+
     def update(self):
-        #
-        self.x += self.ai_settings.alien_speed_factor
+        # turn aliens right or left.
+        self.x += (self.ai_settings.alien_speed_factor * self.ai_settings.fleet_direciton)
         self.rect.x = self.x
-        
