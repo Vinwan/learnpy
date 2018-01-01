@@ -59,6 +59,9 @@ def check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bul
         stats.reset_stats()
         stats.game_active = True
 
+        # reset game settings
+        ai_settings.initialize_dynamic_settings()
+
         # empty aliens and bullets list
         aliens.empty()
         bullets.empty()
@@ -109,6 +112,7 @@ def check_bullet_alien_collisions(ai_settings, screen, ship, aliens, bullets):
     if len(aliens) == 0:
         # delete bullet and create new aliens
         bullets.empty()
+        ai_settings.increase_speed()
         create_fleet(ai_settings, screen, ship, aliens)
 
 def get_number_aliens_x(ai_settings, alien_width):
