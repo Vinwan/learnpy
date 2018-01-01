@@ -73,7 +73,7 @@ def check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bul
         # display cursor
         pygame.mouse.set_visible(False)
 
-def update_screen(ai_settings, screen, stats, ship, aliens, bullets, play_button):
+def update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets, play_button):
 
     # 更新屏幕上的图像，并切换到新屏幕
     # 每次循环时都重绘屏幕
@@ -89,10 +89,13 @@ def update_screen(ai_settings, screen, stats, ship, aliens, bullets, play_button
     if not stats.game_active:
         play_button.draw_button()
 
+    # display score
+    sb.show_score()
+
     # 让最近绘制的屏幕可见
     pygame.display.flip()
 
-def update_bullets(ai_settings, screen, ship, aliens, bullets):
+def update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets):
     # 更新子弹的位置，并删除已消失的子弹
     # 更新子弹的位置
     bullets.update()
@@ -102,12 +105,18 @@ def update_bullets(ai_settings, screen, ship, aliens, bullets):
         if bullet.rect.bottom <= 0:
             bullets.remove(bullet)
 
-    check_bullet_alien_collisions(ai_settings, screen, ship, aliens, bullets)
+    check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens, bullets)
 
-def check_bullet_alien_collisions(ai_settings, screen, ship, aliens, bullets):
+def check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens, bullets):
     # check bullet shoot alien
     # true, delete bullet and alien
     collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
+
+    if collisions:
+        for aliens in collisions.values():
+            stats.score += ai_settings.alien_points * len(aliens)
+            sb.prep_score()
+        check_high_score(stats, sb)
 
     if len(aliens) == 0:
         # delete bullet and create new aliens
@@ -207,3 +216,9 @@ def check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets):
             # like ship hit
             ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
             break
+
+def check_high_score(stats, sb):
+    # check high score
+    if stats.score > stats.high_score:
+        stats.high_score = stats.score
+        sb.prep_high_score()
