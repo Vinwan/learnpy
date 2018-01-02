@@ -66,6 +66,7 @@ def check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bul
         sb.prep_score()
         sb.prep_high_score()
         sb.prep_level()
+        sb.prep_ships()
 
         # empty aliens and bullets list
         aliens.empty()
@@ -173,11 +174,14 @@ def create_fleet(ai_settings, screen, ship, aliens):
             # 创建一个外星人并将其加入当前行
             create_alien(ai_settings, screen, aliens, alien_number, row_number)
 
-def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
+def ship_hit(ai_settings, stats, sb, screen, ship, aliens, bullets):
 
     if stats.ships_left > 0:
         # ships_left -1
         stats.ships_left -= 1
+
+        # update score
+        sb.prep_ships()
 
         # empty aliens list and bullets list
         aliens.empty()
@@ -200,10 +204,10 @@ def update_aliens(ai_settings, stats, screen, ship, aliens, bullets):
 
     # check aliens hit ship
     if pygame.sprite.spritecollideany(ship, aliens):
-        ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
+        ship_hit(ai_settings, stats, sb, screen, ship, aliens, bullets)
 
     # check aliens in bottom
-    check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets)
+    ttom(ai_settings, stats, sb, screen, ship, aliens, bullets)
 
 def check_fleet_edges(ai_settings, aliens):
     # do something if alien move to edges.
@@ -218,13 +222,13 @@ def change_fleet_direction(ai_settings, aliens):
         alien.rect.y += ai_settings.fleet_drop_speed
     ai_settings.fleet_direciton *= -1
 
-def check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets):
+def check_aliens_bottom(ai_settings, stats, sb, screen, ship, aliens, bullets):
     # check aliens to bottom
     screen_rect = screen.get_rect()
     for alien in aliens.sprites():
         if alien.rect.bottom >= screen_rect.bottom:
             # like ship hit
-            ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
+            ship_hit(ai_settings, stats, sb, screen, ship, aliens, bullets)
             break
 
 def check_high_score(stats, sb):
